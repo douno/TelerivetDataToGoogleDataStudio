@@ -1,0 +1,11 @@
+.env
+.DS_Store
+__pycache__/
+bin/
+contacts.json
+data.csv
+data.json
+get_messages.py
+keys.json
+lib/
+pyvenv.cfg
