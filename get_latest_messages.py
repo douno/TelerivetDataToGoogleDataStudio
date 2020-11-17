@@ -4,6 +4,8 @@ import os.path
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
+from get_contacts import get_contacts
+
 import telerivet
 import json
 import time
@@ -35,12 +37,14 @@ LOW_RISK = 'low risk'
 tr = telerivet.API(API_KEY)
 project = tr.initProjectById(PROJECT_ID)
 
+get_contacts()
+
 
 with open('./contacts.json') as json_file:
     contacts = json.load(json_file)
 
 
-d = datetime.today() - timedelta(hours=3, minutes=0)
+d = datetime.today() - timedelta(hours=5, minutes=0)
 
 messagesCursor = project.queryMessages(
     direction = 'outgoing',
@@ -48,6 +52,7 @@ messagesCursor = project.queryMessages(
     time_created = {'min': d.timestamp()}
 
 )
+
 
 messages = []
 
@@ -62,7 +67,8 @@ for message in messagesCursor:
     covid_tested_option = message.vars.covid_tested_option
 
     contact_id = message.contact_id
-    phone_number = message.to_number
+    # Note: Prepend single quote for formatting in google sheet
+    phone_number = "'" + message.to_number
     user_type_option = message.vars.user_type_option
 
     # Symptoms
